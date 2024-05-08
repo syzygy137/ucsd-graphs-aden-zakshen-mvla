@@ -95,8 +95,15 @@ public class GraphAdjList extends Graph {
 	 */		
 	 public List<Integer> getDistance2(int v) {
 		 // XXX: Implement this method in week 2
-		 return null;
+		 List<Integer> distance2 = new ArrayList<Integer>();
+		 List<Integer> neighbors = getNeighbors(v);
+		 for (int i = 0; i < neighbors.size(); i++) {
+			 distance2.addAll(getNeighbors(neighbors.get(i)));
+		 }
+		 return distance2;
 	}
+	
+
 	
 	/**
 	 * Generate string representation of adjacency list
