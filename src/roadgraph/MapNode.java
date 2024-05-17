@@ -26,6 +26,7 @@ public class MapNode {
 	public MapNode() 
 	{
 		//TODO: Write this method
+		edges = new HashMap<>();
 	}
 	
 	/**
@@ -36,7 +37,7 @@ public class MapNode {
 	public HashMap<GeographicPoint, MapEdge> getEdges()
 	{
 		//TODO: Write this method
-		return null;
+		return edges;
 	}
 	
 	/**
@@ -47,7 +48,7 @@ public class MapNode {
 	public Set<GeographicPoint> getNeighborPoints() 
 	{
 		//TODO: Write this method
-		return null;
+		return edges.keySet();
 	}
 	
 	/**
@@ -61,7 +62,7 @@ public class MapNode {
 	public MapEdge getEdge(GeographicPoint to)
 	{
 		//TODO: Write this method
-		return null;
+		return edges.get(to);
 	}
 	
 	/**
@@ -76,7 +77,10 @@ public class MapNode {
 	public boolean addEdge(GeographicPoint to, String roadName, String roadType, double length)
 	{
 		//TODO: Write this method
-		return false;
+		if (edges.containsKey(to))
+			return false;
+		edges.put(to, new MapEdge(roadName, roadType, length));
+		return true;
 	}
 
 }

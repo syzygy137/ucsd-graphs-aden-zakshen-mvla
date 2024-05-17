@@ -345,17 +345,17 @@ public class Maze {
 		Maze maze;
 		List<MazeNode> path;
 		
-		mazeFile = "data/mazes/maze1.maze";
+		mazeFile = "data/mazes/MyMaze.maze";
 		maze = new Maze();
 		MazeLoader.loadMaze(mazeFile, maze);
 		System.out.println("\nMaze:\n");
 		maze.printMaze();
-		path = maze.dfs(3, 3, 2, 0);
+		path = maze.dfs(0, 0, 2, 7);
 		maze.setPath(path);
 		System.out.println("\nDFS Search:\n");
 		maze.printMaze();
 		maze.clearPath();
-		maze.setPath(maze.bfs(3, 3, 2, 0));
+		maze.setPath(maze.bfs(0, 0, 2, 7));
 		System.out.println("\nBFS Search:\n");
 		maze.printMaze();
 	}

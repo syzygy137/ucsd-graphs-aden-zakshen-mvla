@@ -34,6 +34,9 @@ public class MapGraph {
 	public MapGraph()
 	{
 		// TODO: Implement in this constructor
+		numVertices = 0;
+		numEdges = 0;
+		vertices = new HashMap<>();
 	}
 	
 	/**
@@ -43,7 +46,7 @@ public class MapGraph {
 	public int getNumVertices()
 	{
 		//TODO: Implement this method
-		return 0;
+		return numVertices;
 	}
 	
 	/**
@@ -53,7 +56,7 @@ public class MapGraph {
 	public Set<GeographicPoint> getVertices()
 	{
 		//TODO: Implement this method
-		return null;
+		return vertices.keySet();
 	}
 	
 	/**
@@ -63,7 +66,7 @@ public class MapGraph {
 	public int getNumEdges()
 	{
 		//TODO: Implement this method.
-		return 0;
+		return numEdges;
 	}
 
 	
@@ -78,7 +81,10 @@ public class MapGraph {
 	public boolean addVertex(GeographicPoint location)
 	{
 		// TODO: Implement this method
-		return false;
+		if (location == null || vertices.containsKey(location))
+			return false;
+		vertices.put(location, new MapNode());
+		return true;
 	}
 	
 	/**
@@ -97,9 +103,11 @@ public class MapGraph {
 	 */
 	public void addEdge(GeographicPoint from, GeographicPoint to, String roadName,
 			String roadType, double length) throws IllegalArgumentException {
-
+		if (from ==  null || to == null)
+			throw new IllegalArgumentException();
 		//TODO: Implement this method
-		
+		vertices.get(from).addEdge(to, roadName, roadType, length);
+		numEdges++;
 	}
 	
 	/** Find the path from start to goal using breadth first search - without MapApp.
