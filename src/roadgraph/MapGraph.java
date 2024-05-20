@@ -8,8 +8,13 @@
 package roadgraph;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -84,6 +89,7 @@ public class MapGraph {
 		if (location == null || vertices.containsKey(location))
 			return false;
 		vertices.put(location, new MapNode());
+		numVertices++;
 		return true;
 	}
 	
@@ -142,8 +148,42 @@ public class MapGraph {
 		// Hook for visualization.  See writeup. Note that this may actually need to be
 		// located in a helper method.
 		//nodeSearched.accept(next.getLocation());
-
-		return null;
+		if (start == null || goal == null)
+			return null;
+		Queue<GeographicPoint> queue = new LinkedList<>();
+		Set<GeographicPoint> visited = new HashSet<>();
+		Set<GeographicPoint> neighbors = new HashSet<>();
+		Map<GeographicPoint, GeographicPoint> parent = new HashMap<>();
+		
+		visited.add(start);
+		queue.add(start);
+		
+		while(!queue.isEmpty()) {
+			GeographicPoint current = queue.poll();
+			nodeSearched.accept(current);
+			if(current.equals(goal)) {
+				GeographicPoint point = start;
+				List<GeographicPoint> path = new ArrayList<>();
+				while (!point.equals(goal)) {
+					path.add(point);
+					point = parent.get(point);
+					if (point == null)
+						break;
+				}
+				path.add(goal);
+				return path;
+				
+			}
+			neighbors = vertices.get(current).getNeighborPoints();
+			for (GeographicPoint neighbor : neighbors) {
+				if(!visited.contains(neighbor)) {
+					queue.add(neighbor);
+					parent.put(current, neighbor);
+					visited.add(neighbor);
+				}
+			}
+		}
+ 		return null;
 	}
 	
 	// DO NOT CODE ANYTHING BELOW THIS LINE UNTIL PART2
