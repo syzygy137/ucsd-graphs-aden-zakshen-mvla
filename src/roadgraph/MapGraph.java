@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -235,6 +236,40 @@ public class MapGraph {
 		// Hook for visualization.  See writeup. Note that this may actually need to be
 		// located in a helper method.
 		//nodeSearched.accept(next.getLocation());
+		if (start == null || goal == null)
+			return null;
+		PriorityQueue<QueueElement> queue = new PriorityQueue<>();
+		Set<GeographicPoint> visited = new HashSet<>();
+		Set<GeographicPoint> neighbors = new HashSet<>();
+		Map<GeographicPoint, GeographicPoint> parent = new HashMap<>();
+		Map<GeographicPoint, Double> distances = new HashMap<>();
+		
+		for (GeographicPoint point : vertices.keySet()) {
+			distances.put(point, Double.POSITIVE_INFINITY);
+		}
+		distances.put(start, (double) 0);
+		queue.add(new QueueElement(start, (double)0));
+		
+		while(!queue.isEmpty()) {
+			GeographicPoint current = queue.poll().getPoint();
+			nodeSearched.accept(current);
+			if(current.equals(goal)) {
+				return findPath(start, goal, parent);
+			}
+			neighbors = vertices.get(current).getNeighborPoints();
+			for (GeographicPoint neighbor : neighbors) {
+				if(!visited.contains(neighbor)) {
+					double distance = distances.get(current) + current.distance(neighbor);
+					if (distance < distances.get(neighbor)) {
+						distances.put(neighbor, distance);
+						queue.add(new QueueElement(neighbor, distance));
+						parent.put(neighbor, current);
+						visited.add(neighbor);
+					}
+				}
+			}
+			
+		}
 		
 		return null;
 	}
