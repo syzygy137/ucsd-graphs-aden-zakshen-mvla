@@ -162,28 +162,43 @@ public class MapGraph {
 			GeographicPoint current = queue.poll();
 			nodeSearched.accept(current);
 			if(current.equals(goal)) {
-				GeographicPoint point = start;
-				List<GeographicPoint> path = new ArrayList<>();
-				while (!point.equals(goal)) {
-					path.add(point);
-					point = parent.get(point);
-					if (point == null)
-						break;
-				}
-				path.add(goal);
-				return path;
-				
+				return findPath(start, goal, parent);
 			}
 			neighbors = vertices.get(current).getNeighborPoints();
 			for (GeographicPoint neighbor : neighbors) {
 				if(!visited.contains(neighbor)) {
 					queue.add(neighbor);
-					parent.put(current, neighbor);
+					parent.put(neighbor, current);
 					visited.add(neighbor);
 				}
 			}
 		}
  		return null;
+	}
+	
+	/** Returns path
+	 * 
+	 * @param start The starting location
+	 * @param goal The goal location
+	 * @param parent The parent hashmap
+	 * @return The list of intersections that form the shortest path from 
+	 *   start to goal (including both start and goal).
+	 */
+	
+	public List<GeographicPoint> findPath(GeographicPoint start, GeographicPoint goal, 
+			Map<GeographicPoint, GeographicPoint> parent) {
+		GeographicPoint point = goal;
+		List<GeographicPoint> path = new ArrayList<>();
+		while (!point.equals(start)) {
+			path.add(0, point);
+			point = parent.get(point);
+			if (point == null) {
+				break;
+			}
+				
+		}
+		path.add(0, start);
+		return path;
 	}
 	
 	// DO NOT CODE ANYTHING BELOW THIS LINE UNTIL PART2
