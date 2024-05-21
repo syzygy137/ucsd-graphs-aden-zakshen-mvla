@@ -236,22 +236,19 @@ public class MapGraph {
 		// Hook for visualization.  See writeup. Note that this may actually need to be
 		// located in a helper method.
 		//nodeSearched.accept(next.getLocation());
-		if (start == null || goal == null)
-			return null;
+		if (start == null || goal == null) return null;
 		PriorityQueue<QueueElement> queue = new PriorityQueue<>();
 		Set<GeographicPoint> visited = new HashSet<>();
 		Set<GeographicPoint> neighbors = new HashSet<>();
 		Map<GeographicPoint, GeographicPoint> parent = new HashMap<>();
 		Map<GeographicPoint, Double> distances = new HashMap<>();
-		
-		for (GeographicPoint point : vertices.keySet()) {
+		for (GeographicPoint point : vertices.keySet())
 			distances.put(point, Double.POSITIVE_INFINITY);
-		}
 		distances.put(start, (double) 0);
 		queue.add(new QueueElement(start, (double)0));
-		
 		while(!queue.isEmpty()) {
 			GeographicPoint current = queue.poll().getPoint();
+			visited.add(current);
 			nodeSearched.accept(current);
 			if(current.equals(goal)) {
 				return findPath(start, goal, parent);
@@ -264,13 +261,10 @@ public class MapGraph {
 						distances.put(neighbor, distance);
 						queue.add(new QueueElement(neighbor, distance));
 						parent.put(neighbor, current);
-						visited.add(neighbor);
 					}
 				}
 			}
-			
 		}
-		
 		return null;
 	}
 
