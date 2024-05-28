@@ -62,7 +62,7 @@ public class QueueElement implements Comparable<QueueElement> {
      */
     public int compareTo(QueueElement o )
     {
-    	return Double.compare(this.distFromStart,o.getDistFromStart());
+    	return Double.compare(this.distPriority,o.getPriorityDistance());
     }
 
 }
