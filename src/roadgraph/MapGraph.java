@@ -299,7 +299,38 @@ public class MapGraph {
 		// Hook for visualization.  See writeup. Note that this may actually need to be
 		// located in a helper method.
 		//nodeSearched.accept(next.getLocation());
-		
+		if (start == null || goal == null) return null;
+		PriorityQueue<QueueElement> queue = new PriorityQueue<>();
+		Set<GeographicPoint> visited = new HashSet<>();
+		Set<GeographicPoint> neighbors = new HashSet<>();
+		Map<GeographicPoint, GeographicPoint> parent = new HashMap<>();
+		Map<GeographicPoint, Double> distToGoal = new HashMap<>();
+		for (GeographicPoint point : vertices.keySet())
+			distToGoal.put(point, Double.POSITIVE_INFINITY);
+		distToGoal.put(start, start.distance(goal));
+		queue.add(new QueueElement(start, 0.0, goal));
+		while(!queue.isEmpty()) {
+			QueueElement element = queue.poll();
+			GeographicPoint current = element.getPoint();
+			visited.add(current);
+			nodeSearched.accept(current);
+			if(current.equals(goal)) {
+				return findPath(start, goal, parent);
+			}
+			neighbors = vertices.get(current).getNeighborPoints();
+			for (GeographicPoint next : neighbors) {
+				if(!visited.contains(next)) {
+					double distToNext = element.getDistFromStart() + vertices.get(current).getEdge(next).getRoadLength();
+					element = new QueueElement(next, distToNext, goal);
+					double distPriority = element.getPriorityDistance();
+					if (distPriority < distToGoal.get(next)) {
+						distToGoal.put(next, distPriority);
+						queue.add(element);
+						parent.put(next, current);
+					}
+				}
+			}
+		}
 		return null;
 	}
 

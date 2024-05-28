@@ -12,7 +12,8 @@ import geography.GeographicPoint;
 public class QueueElement implements Comparable<QueueElement> {
 	
 	private GeographicPoint point;
-    private double distFromStart;   
+    private double distFromStart; 
+    private double distPriority;
     
     /** Constructor for Dijsktra search
      * @param pt - current point
@@ -22,9 +23,17 @@ public class QueueElement implements Comparable<QueueElement> {
     {
     	this.point = pt;
     	this.distFromStart = d1;
+    	this.distPriority = d1;
     }
     
-    /** gets the current point
+    public QueueElement(GeographicPoint start, double d, GeographicPoint goal) {
+		// TODO Auto-generated constructor stub
+    	this.point = start;
+    	this.distFromStart = d;
+    	this.distPriority = distFromStart + start.distance(goal);
+	}
+
+	/** gets the current point
      * @return
      */
     public GeographicPoint getPoint()
@@ -39,6 +48,13 @@ public class QueueElement implements Comparable<QueueElement> {
     public double getDistFromStart() 
     {
     	return distFromStart;
+    }
+    
+    /** Gets the distance from the goal
+     * @return
+     */
+    public double getPriorityDistance() {
+    	return distPriority;
     }
     
     /** Comparator function for the priority queue for Dijkstra. 
