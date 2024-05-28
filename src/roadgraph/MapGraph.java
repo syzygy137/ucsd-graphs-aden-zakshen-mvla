@@ -305,23 +305,20 @@ public class MapGraph {
 		Set<GeographicPoint> neighbors = new HashSet<>();
 		Map<GeographicPoint, GeographicPoint> parent = new HashMap<>();
 		Map<GeographicPoint, Double> distToGoal = new HashMap<>();
-		for (GeographicPoint point : vertices.keySet())
-			distToGoal.put(point, Double.POSITIVE_INFINITY);
+		for (GeographicPoint point : vertices.keySet()) distToGoal.put(point, Double.POSITIVE_INFINITY);
 		distToGoal.put(start, start.distance(goal));
 		queue.add(new QueueElement(start, 0.0, goal));
 		while(!queue.isEmpty()) {
-			QueueElement element = queue.poll();
-			GeographicPoint current = element.getPoint();
+			QueueElement OGelement = queue.poll();
+			GeographicPoint current = OGelement.getPoint();
 			visited.add(current);
 			nodeSearched.accept(current);
-			if(current.equals(goal)) {
-				return findPath(start, goal, parent);
-			}
+			if(current.equals(goal)) return findPath(start, goal, parent);
 			neighbors = vertices.get(current).getNeighborPoints();
 			for (GeographicPoint next : neighbors) {
 				if(!visited.contains(next)) {
-					double distToNext = element.getDistFromStart() + vertices.get(current).getEdge(next).getRoadLength();
-					element = new QueueElement(next, distToNext, goal);
+					double distToNext = OGelement.getDistFromStart() + vertices.get(current).getEdge(next).getRoadLength();
+					QueueElement element = new QueueElement(next, distToNext, goal);
 					double distPriority = element.getPriorityDistance();
 					if (distPriority < distToGoal.get(next)) {
 						distToGoal.put(next, distPriority);
